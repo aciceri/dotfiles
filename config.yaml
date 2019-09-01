@@ -59,6 +59,9 @@ dotfiles:
   f_mako_config:
     src: config/mako/config
     dst: ~/.config/mako/config
+  f_irssi_config:
+    src: config/irssi/config
+    dst: ~/.config/irssi/config
 profiles:
   pc:
     dotfiles:
@@ -80,3 +83,4 @@ profiles:
     - f_spotify.py
     - f_gitconfig
     - f_mako_config
+    - f_irssi_config
