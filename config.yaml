@@ -2,11 +2,25 @@ config:
   backup: true
   create: true
   dotpath: dotfiles
+  import_variables:
+  - vars.yaml
 dotfiles:
   f_zshrc:
     src: zshrc
     dst: ~/.zshrc
+  f_zprofile:
+    src: zprofile
+    dst: ~/.zprofile
+  f_tmux.conf:
+    src: tmux.conf
+    dst: ~/.tmux.conf
+  f_vimrc:
+    src: vimrc
+    dst: ~/.vimrc
 profiles:
   pc:
     dotfiles:
     - f_zshrc
+    - f_zprofile
+    - f_tmux.conf
+    - f_vimrc
