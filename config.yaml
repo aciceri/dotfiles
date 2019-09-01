@@ -20,6 +20,39 @@ dotfiles:
   f_config:
     src: config/cava/config
     dst: ~/.config/cava/config
+  f_rc.conf:
+    src: config/ranger/rc.conf
+    dst: ~/.config/ranger/rc.conf
+  f_rifle.conf:
+    src: config/ranger/rifle.conf
+    dst: ~/.config/ranger/rifle.conf
+  f_scope.sh:
+    src: config/ranger/scope.sh
+    dst: ~/.config/ranger/scope.sh
+  f_termite_config:
+    src: config/termite/config
+    dst: ~/.config/termite/config
+  f_waybar_config:
+    src: config/waybar/config
+    dst: ~/.config/waybar/config
+  d_modules:
+    src: config/waybar/modules
+    dst: ~/.config/waybar/modules
+  f_style.css:
+    src: config/waybar/style.css
+    dst: ~/.config/waybar/style.css
+  f_waybar.sh:
+    src: config/waybar/waybar.sh
+    dst: ~/.config/waybar/waybar.sh
+  f_sway_config:
+    src: config/sway/config
+    dst: ~/.config/sway/config
+  f_dashboard.sh:
+    src: bin/dashboard.sh
+    dst: ~/bin/dashboard.sh
+  f_spotify.py:
+    src: bin/spotify.py
+    dst: ~/bin/spotify.py
 profiles:
   pc:
     dotfiles:
@@ -28,3 +61,14 @@ profiles:
     - f_tmux.conf
     - f_vimrc
     - f_config
+    - f_rc.conf
+    - f_rifle.conf
+    - f_scope.sh
+    - f_termite_config
+    - f_waybar_config
+    - d_modules
+    - f_style.css
+    - f_waybar.sh
+    - f_sway_config
+    - f_dashboard.sh
+    - f_spotify.py
