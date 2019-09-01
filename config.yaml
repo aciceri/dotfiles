@@ -17,6 +17,9 @@ dotfiles:
   f_vimrc:
     src: vimrc
     dst: ~/.vimrc
+  f_config:
+    src: config/cava/config
+    dst: ~/.config/cava/config
 profiles:
   pc:
     dotfiles:
@@ -24,3 +27,4 @@ profiles:
     - f_zprofile
     - f_tmux.conf
     - f_vimrc
+    - f_config
