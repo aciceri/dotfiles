@@ -53,6 +53,9 @@ dotfiles:
   f_spotify.py:
     src: bin/spotify.py
     dst: ~/bin/spotify.py
+  f_gitconfig:
+    src: gitconfig
+    dst: ~/.gitconfig
 profiles:
   pc:
     dotfiles:
@@ -72,3 +75,4 @@ profiles:
     - f_sway_config
     - f_dashboard.sh
     - f_spotify.py
+    - f_gitconfig

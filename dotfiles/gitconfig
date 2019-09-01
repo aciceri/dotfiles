@@ -1,0 +1,7 @@
+[user]
+	email = andreaciceri96@gmail.com
+	name = andrea96
+[color]
+	ui = true
+[core]
+	editor = emacsclient -ct
