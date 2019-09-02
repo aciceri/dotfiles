@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/env zsh
 
 
 
@@ -18,9 +18,9 @@ SESSION_NAME="Dashboard"
 tmux detach > /dev/null
 tmux kill-session -t $SESSION_NAME
 
-# Create a new session, -d means detached itself
-set -- $(stty size) # $1 = rows $2 = columns
-tmux new-session -d -s $SESSION_NAME -x "$2" -y "$(($1 - 1))"
+TERMX="213"
+TERMY="63"
+tmux new-session -d -s $SESSION_NAME -x $TERMX -y $TERMY
 
 tmux new-window -t $SESSION_NAME:1 -n 'system'
 tmux new-window -t $SESSION_NAME:2 -n 'weather'
@@ -53,6 +53,7 @@ tmux select-pane -t 1
 tmux send-keys "gtop" C-m
 tmux select-pane -t 2
 tmux send-keys "cava" C-m
+tmux select-pane -t 0
 
 tmux kill-window -t 0
 
