@@ -21,6 +21,7 @@ There are two things you can do about this warning:
 ;; packages list, change this to add new packages
 (setq packages '(spacemacs-theme
 		 evil
+		 evil-nerd-commenter
 		 undo-tree
 		 powerline
 		 all-the-icons
@@ -41,7 +42,8 @@ There are two things you can do about this warning:
 		 elpy
 		 flycheck
 		 py-autopep8
-		 paredit))
+		 paredit
+		 haskell-mode))
 
 ;; iter over the packages list and install new packages, doing a refresh before
 (setq already-refreshed nil) ; the refresh must be done only one time
@@ -131,6 +133,10 @@ There are two things you can do about this warning:
 (require 'all-the-icons)
 
 
+(require 'evil-nerd-commenter)
+(evilnc-default-hotkeys)
+
+
 (require 'dashboard)
 (dashboard-setup-startup-hook)
 (setq dashboard-items '((recents  . 5)
@@ -177,7 +183,7 @@ There are two things you can do about this warning:
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (all-the-icons highlight-indent-guides paredit spacemacs-theme smex ranger rainbow-delimiters py-autopep8 neotree material-theme flycheck f evil-magit elpy company-math company-auctex centaur-tabs))))
+    (evil-nerd-commenter spacemacs-theme smex ranger rainbow-delimiters py-autopep8 projectile paredit neotree material-theme highlight-indent-guides flycheck f evil-magit elpy dashboard company-math company-auctex centaur-tabs all-the-icons))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
