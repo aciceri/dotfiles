@@ -9,6 +9,6 @@
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
 
-(display-line-numbers-mode)
+(global-display-line-numbers-mode)
 
 (provide 'appearance)

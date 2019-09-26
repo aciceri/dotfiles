@@ -34,7 +34,7 @@ powerline-daemon -q
 
 # Aliases
 alias ls=ls++
-alias em=emacsclient -ct
+alias em="emacsclient -ct"
 alias nh="st -f \"Dejavu Sans Mono:pixelsize=20\" -e zsh -c 'echo \"Make this window full screen and press ENTER\"; read; stty columns 80; stty rows 24; asciinema rec -c \"ssh nethack@alt.org\" --title \"Nethack gameplay - $(date)\"'"
 alias weather="curl wttr.in/Milan"
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"

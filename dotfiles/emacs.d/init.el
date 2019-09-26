@@ -19,12 +19,29 @@ There are two things you can do about this warning:
 (package-initialize)
 
 ;; packages list, change this to add new packages
-(setq packages '(evil
-		 powerline 
+(setq packages '(spacemacs-theme
+		 evil
+		 undo-tree
+		 powerline
+		 all-the-icons
+		 smex
 		 company
+		 centaur-tabs
+		 highlight-indent-guides
+		 dashboard
+		 magit
+		 evil-magit
+		 rainbow-delimiters
+		 neotree
+		 ranger
+		 projectile
 		 auctex
 		 company-auctex
-		 company-math))
+		 company-math
+		 elpy
+		 flycheck
+		 py-autopep8
+		 paredit))
 
 ;; iter over the packages list and install new packages, doing a refresh before
 (setq already-refreshed nil) ; the refresh must be done only one time
@@ -48,6 +65,10 @@ There are two things you can do about this warning:
   kept-old-versions 2
   version-control t)
 
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+(setq-default fill-column 100)
+
+(add-hook 'prog-mode-hook #'hs-minor-mode) ; hs-minor-mode is necessary for evil to fold
 
 (require 'appearance)
 
@@ -61,17 +82,105 @@ There are two things you can do about this warning:
 (evil-mode 1) ; for emacs and vim commands at the same time
 
 
+(require 'smex) 
+(smex-initialize) 
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command) ; old M-x is still available
+
+
+(require 'centaur-tabs)
+(centaur-tabs-mode t)
+(global-set-key (kbd "C-<prior>")  'centaur-tabs-backward)
+(global-set-key (kbd "C-<next>") 'centaur-tabs-forward)
+(setq centaur-tabs-cycle-scope 'tabs) ; cycle through visible tabs (that is, the tabs in the current group)
+
 (require 'powerline)
 (powerline-center-evil-theme)
+
+
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+
+(require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
 
 (require 'company)
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "TAB") 'company-complete)
 
+(require 'undo-tree)
+(global-undo-tree-mode 1)
+(global-set-key (kbd "C-r") 'undo-tree-redo)
+
+
+(require 'highlight-indent-guides)
+(setq highlight-indent-guides-method 'character)
+(add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+
+
+(require 'projectile)
+(projectile-mode +1)
+
+
+(require 'evil-magit)
+
+
+(require 'all-the-icons)
+
+
+(require 'dashboard)
+(dashboard-setup-startup-hook)
+(setq dashboard-items '((recents  . 5)
+                        (projects . 5)
+                        ))
+(setq dashboard-set-navigator t)
+
+
+(require 'paredit)
+(mapcar (lambda (mode) (add-hook mode #'enable-paredit-mode))
+	'(emacs-lisp-mode-hook
+	  eval-expression-minibuffer-setup-hook
+	  ielm-mode-hook
+	  lisp-mode-hook
+	  lisp-interaction-mode-hook
+	  scheme-mode-hook
+	  ))
+
+(require 'ranger)
+(ranger-override-dired-mode t)
+
+
+;; Python editing configuration
+(require 'elpy)
+(elpy-enable)
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+
+;; LaTeX editing configuration
 (defun latex-mode-setup ()
   (setq-local company-backends
               (append '((company-math-symbols-latex company-latex-commands))
                       company-backends)))
 
 (add-hook 'TeX-mode-hook 'latex-mode-setup)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (all-the-icons highlight-indent-guides paredit spacemacs-theme smex ranger rainbow-delimiters py-autopep8 neotree material-theme flycheck f evil-magit elpy company-math company-auctex centaur-tabs))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
