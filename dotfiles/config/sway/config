@@ -192,9 +192,8 @@ exec --no-startup-id nm-applet
 exec --no-startup-id mako
 exec --no-startup-id qutebrowser
 exec --no-startup-id 'telegram-desktop --class=telegram'
-#exec --no-startup-id mopidy
 exec --no-startup-id termite -e "/home/andrea/bin/dashboard.sh" --title="Dashboard"
-exec --no-startup-id sleep 10 && emacsclient -c
+exec --no-startup-id emacs
 exec --no-startup-id 'python3 ~/bin/spotify.py'
 exec --no-startup-id 'rclone mount remote:/ /mnt/mega/'
 exec --no-startup-id 'transmission-gtk'

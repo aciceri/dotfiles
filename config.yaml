@@ -62,6 +62,15 @@ dotfiles:
   f_irssi_config:
     src: config/irssi/config
     dst: ~/.config/irssi/config
+  f_init.el:
+    src: emacs.d/init.el
+    dst: ~/.emacs.d/init.el
+  f_appearance.el:
+    src: emacs.d/conf/appearance.el
+    dst: ~/.emacs.d/conf/appearance.el
+  f_custom.el:
+    src: emacs.d/conf/custom.el
+    dst: ~/.emacs.d/conf/custom.el
 profiles:
   pc:
     dotfiles:
@@ -84,3 +93,6 @@ profiles:
     - f_gitconfig
     - f_mako_config
     - f_irssi_config
+    - f_init.el
+    - f_appearance.el
+    - f_custom.el
