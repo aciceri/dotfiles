@@ -8,8 +8,9 @@ The configurations are inside the folder `dotfiles`, the directory structure is 
 This repo contains dotfiles that, indeed, are jinja2 template. So there are some files which contain variables like `{{@@ username @@}}` or `{{@@ password @@}}`, the values of these variables is stored inside the file `vars.yaml`, that, for obvious reasons is in the `.gitignore`. This file is necessary and it's structured as follows:
 ```
 variables:
-  username: "a_boring_nick34"
-  password: "1234"
+  freenodeNick: ""
+  freenodePassword: ""
+  irssiNick: ""
 ```
 To *install* the dotfiles in the machine, i.e. copy from the repo to the correct folders the configuration, the command is
 

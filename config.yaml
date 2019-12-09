@@ -59,9 +59,6 @@ dotfiles:
   f_mako_config:
     src: config/mako/config
     dst: ~/.config/mako/config
-  f_irssi_config:
-    src: config/irssi/config
-    dst: ~/.config/irssi/config
   f_init.el:
     src: emacs.d/init.el
     dst: ~/.emacs.d/init.el
@@ -71,6 +68,15 @@ dotfiles:
   f_custom.el:
     src: emacs.d/conf/custom.el
     dst: ~/.emacs.d/conf/custom.el
+  f_irssi:
+    src: irssi/config
+    dst: ~/.irssi/config
+  f_config.py:
+    src: config/qutebrowser/config.py
+    dst: ~/.config/qutebrowser/config.py
+  f_guile:
+    src: guile
+    dst: ~/.guile
 profiles:
   pc:
     dotfiles:
@@ -92,7 +98,9 @@ profiles:
     - f_spotify.py
     - f_gitconfig
     - f_mako_config
-    - f_irssi_config
     - f_init.el
     - f_appearance.el
     - f_custom.el
+    - f_irssi
+    - f_config.py
+    - f_guile

@@ -56,8 +56,9 @@ assign [title="irssi"] $ws8
 assign [title="Transmission"] $ws7
 
 # start a terminal
-bindsym $mod+Return exec termite -e "tmux -f /usr/share/powerline/bindings/tmux/powerline.conf" --title="Termite"
-bindsym $mod+p exec grim -g "$(slurp)" /home/andrea/Images/screenshot.png
+bindsym $mod+Return exec termite -e "zsh -c 'source ~/.zshrc && tmux'" --title="Termite"
+bindsym $mod+t exec termite --title="Termite"
+bindsym $mod+p exec grim -g "$(slurp)" /home/andrea/pics/screenshot.png
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -144,7 +145,7 @@ bindsym $mod+F4 exec amixer -D pulse sset Master 1+ toggle
 bindsym $mod+F8 exec playerctl next
 bindsym $mod+F7 exec playerctl play-pause
 bindsym $mod+F6 exec playerctl previous
-bindsym $mod+F11 exec i3lock -i ~/Images/wallpaper.png
+bindsym $mod+F11 exec swaylock -i ~/pics/wallpaper.jpg
 
 bindsym $mod+Prior exec redshift -O 3600
 bindsym $mod+Next exec pkill redshift
@@ -176,25 +177,25 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Rules for applications
-for_window [class="Peek"] floating enable
+#for_window [app_id="^floating$"] floating enable # title of the window spawned by qutebrowser
 
 # Extra shotcuts
-bindsym Control+Space exec makoctl dismiss
-bindsym Control+Shift+Space exec makoctl dismiss --all
+#bindsym Control+Space exec makoctl dismiss
+#bindsym Control+Shift+Space exec makoctl dismiss --all
 
 bindsym $mod+b exec qutebrowser
-bindsym $mod+m exec python ~/.config/i3/spotify.py
+bindsym $mod+m exec sh ~/bin/spotify.sh
 
 exec_always ~/.config/waybar/waybar.sh
-exec --no-startup-id swaybg -i ~/Pictures/wallpaper.png
+exec --no-startup-id swaybg -i ~/pics/wallpaper.jpg
 exec --no-startup-id redshift -O 3600
-exec --no-startup-id nm-applet
-exec --no-startup-id mako
+#exec --no-startup-id nm-applet
+#exec --no-startup-id mako
 exec --no-startup-id qutebrowser
 exec --no-startup-id 'telegram-desktop --class=telegram'
-exec --no-startup-id termite -e "/home/andrea/bin/dashboard.sh" --title="Dashboard"
+exec --no-startup-id termite -e "zsh -c /home/andrea/bin/dashboard.sh" --title="Dashboard"
 exec --no-startup-id emacs
 exec --no-startup-id 'python3 ~/bin/spotify.py'
-exec --no-startup-id 'rclone mount remote:/ /mnt/mega/'
+exec --no-startup-id 'rclone mount mega:/ ~/mega/'
 exec --no-startup-id 'transmission-gtk'
 exec --no-startup-id termite -e "irssi" --title="irssi"
