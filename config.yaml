@@ -50,9 +50,6 @@ dotfiles:
   f_dashboard.sh:
     src: bin/dashboard.sh
     dst: ~/bin/dashboard.sh
-  f_spotify.py:
-    src: bin/spotify.py
-    dst: ~/bin/spotify.py
   f_gitconfig:
     src: gitconfig
     dst: ~/.gitconfig
@@ -77,6 +74,9 @@ dotfiles:
   f_guile:
     src: guile
     dst: ~/.guile
+  f_spotify.sh:
+    src: bin/spotify.sh
+    dst: ~/bin/spotify.sh
 profiles:
   pc:
     dotfiles:
@@ -95,7 +95,6 @@ profiles:
     - f_waybar.sh
     - f_sway_config
     - f_dashboard.sh
-    - f_spotify.py
     - f_gitconfig
     - f_mako_config
     - f_init.el
@@ -104,3 +103,4 @@ profiles:
     - f_irssi
     - f_config.py
     - f_guile
+    - f_spotify.sh
