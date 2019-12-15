@@ -38,6 +38,7 @@ alias nh="st -f \"Dejavu Sans Mono:pixelsize=20\" -e zsh -c 'echo \"Make this wi
 alias weather="curl wttr.in/Milan"
 alias rr="curl -s -L https://raw.githubusercontent.com/keroserene/rickrollrc/master/roll.sh | bash"
 alias pip-upgrade="pip list --user --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
+alias clean-downloads='sh ~/bin/clean-downloads.sh'
 
 export PATH=$PATH:/opt/yices-1.0.40/bin/
 export PATH=$PATH:~/.local/bin/ #pip executables

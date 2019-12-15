@@ -77,6 +77,12 @@ dotfiles:
   f_spotify.sh:
     src: bin/spotify.sh
     dst: ~/bin/spotify.sh
+  f_clean-downloads.sh:
+    src: bin/clean-downloads.sh
+    dst: ~/bin/clean-downloads.sh
+  f_retroarch.cfg:
+    src: config/retroarch/retroarch.cfg
+    dst: ~/.config/retroarch/retroarch.cfg
 profiles:
   pc:
     dotfiles:
@@ -104,3 +110,5 @@ profiles:
     - f_config.py
     - f_guile
     - f_spotify.sh
+    - f_clean-downloads.sh
+    - f_retroarch.cfg
