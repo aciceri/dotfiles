@@ -129,12 +129,12 @@
    ("C-x C-f" . helm-find-files))
   )
 
-;;(use-package helm-exwm)
+(use-package helm-exwm)
 
 (use-package company               
   :init (global-company-mode))
 
-(use-package helm-company)
+;;(use-package helm-company)
 
 (use-package nix-mode
   :mode "\\.nix\\'")
