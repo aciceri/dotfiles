@@ -9,6 +9,7 @@ c.editor.command = ['emacsclient', '-c', '"{}"']
 c.scrolling.smooth = False
 c.content.pdfjs = True
 c.scrolling.bar = 'always'
+c.tabs.tabs_are_windows = True
 
 ui_font = '12pt monospace' #I'm getting old and going blind
 c.fonts.completion.category = ui_font

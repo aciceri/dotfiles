@@ -7,12 +7,14 @@ in
   home.packages = with pkgs; [
     # Emacs
     (import ./custom-pkgs/emacs.nix { pkgs=pkgs; })
-
+    
     # Cli
     vim
     git
     exa  # ls replacement
     translate-shell
+    ack  # used by Helm for realtime grepping
+    surfraw
     
     
     # Not cli
@@ -34,16 +36,17 @@ in
     };
     "test.txt".text = "${pkgs.dbus}";
     ".xinitrc".text = ''
-                      if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-                        eval $(dbus-launch --exit-with-session --sh-syntax)
-                      fi
-                      systemctl --user import-environment $DISPLAY $XAUTHORITY
-                      if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-                         dbus-update-activation-environment $DISPLAY $XAUTHORITY
-                      fi
+                      #if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
+                      #  eval $(dbus-launch --exit-with-session --sh-syntax)
+                      #fi
+                      #systemctl --user import-environment $DISPLAY $XAUTHORITY
+                      #if command -v dbus-update-activation-environment >/dev/null 2>&1; then
+                      #   dbus-update-activation-environment $DISPLAY $XAUTHORITY
+                      #fi
                       
-                      xsetroot -cursor_name left_ptr
-                      exec emacsclient -c -F "'(fullscreen . maximized)"
+                      #xsetroot -cursor_name left_ptr
+                      #exec emacsclient -c -F "'(fullscreen . maximized)"
+                      exec dbus-launch --exit-with-session emacsclient -c -F "'(fullscreen . maximized)"
                     '';
     ".zlogin".text = ''
                      [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && sleep 2 &&exec startx

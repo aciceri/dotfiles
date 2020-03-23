@@ -29,7 +29,9 @@ in
   hardware.pulseaudio.enable = true;
 
   time.timeZone = "Europe/Rome";
-
+  location.latitude = 45.46;
+  location.longitude = 9.18;
+  
   fonts.fonts = with pkgs; [
     source-code-pro
     fira-code
@@ -67,6 +69,10 @@ in
       #windowManager.default = "custom";
     };
 
+    redshift = {
+      enable = true;
+    };
+    
     mingetty.autologinUser = user.username;
     
     emacs = {
