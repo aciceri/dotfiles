@@ -8,16 +8,46 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode 1)
+(setq display-time-format "%I:%M:%S")
+(display-time-mode 1)
+
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'hl-line-mode)
 
 (add-to-list 'default-frame-alist '(font . "Source Code Pro-12"))
 (set-face-attribute 'default t :font "Source Code Pro-12")
 
-(use-package cyberpunk-theme
+(package-initialize)
+
+(use-package doom-themes
   :config
-  (add-hook 'after-init-hook 
-	    (lambda () (load-theme 'cyberpunk t))))
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
+  
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config)
+  )
+
+(use-package all-the-icons)
+
+(use-package doom-modeline
+  :init (doom-modeline-mode 1))
+
 
 (use-package exwm
+  :if window-system
   :config
   (progn
     (require 'seq)
@@ -62,21 +92,15 @@
   
   (exwm-enable)))
 
-(use-package telephone-line
-  :config
-  (progn
-    (setq telephone-line-lhs
-	  '((evil   . (telephone-line-evil-tag-segment))
-	    (accent . (telephone-line-vc-segment
-		       telephone-line-erc-modified-channels-segment
-		       telephone-line-process-segment))
-	    (nil    . (telephone-line-minor-mode-segment
-		       telephone-line-buffer-segment))))
-    (setq telephone-line-rhs
-	  '((nil    . (telephone-line-misc-info-segment))
-	    (accent . (telephone-line-major-mode-segment))
-	    (evil   . (telephone-line-airline-position-segment))))
-    (telephone-line-mode t)))
+(use-package windsize
+  :after exwm
+  :config (progn
+	    (windsize-default-keybindings)
+	    (exwm-input-set-key (kbd "s-H") #'windsize-left)
+	    (exwm-input-set-key (kbd "s-J") #'windsize-down)
+	    (exwm-input-set-key (kbd "s-K") #'windsize-up)
+	    (exwm-input-set-key (kbd "s-L") #'windsize-right)
+  ))
 
 (use-package evil
   :init
@@ -85,7 +109,7 @@
   (evil-mode 1))
 
 (use-package evil-collection
-  :after evil
+  :after (evil company-mode)
   :config
   (evil-collection-init))
 
@@ -98,7 +122,6 @@
     (require 'helm-config)
     (setq helm-autoresize-max-height 0)
     (setq helm-autoresize-min-height 20)
-    (helm-autoresize-mode 1)
     (global-set-key (kbd "C-c h") 'helm-command-prefix)
     (global-unset-key (kbd "C-x c"))
 
@@ -111,9 +134,11 @@
 	  helm-M-x-fuzzy-match t ;; optional fuzzy matching for helm-M-x
 	  helm-buffers-fuzzy-matching t
 	  helm-recentf-fuzzy-match t
+	  helm-split-window-in-side-p t
 	  helm-buffer-max-length nil)
 
-    (helm-mode 1))
+    (helm-mode 1)
+    (helm-autoresize-mode 1))
 
   :bind
   (("C-c h" . helm-command-prefix)
@@ -129,12 +154,17 @@
    ("C-x C-f" . helm-find-files))
   )
 
-(use-package helm-exwm)
+(use-package helm-exwm
+  :after (exwm helm)
+  :config (setq helm-exwm-buffer-max-length nil)
+)
 
-(use-package company               
-  :init (global-company-mode))
+(use-package company
+  :config (global-company-mode))
 
 ;;(use-package helm-company)
 
 (use-package nix-mode
   :mode "\\.nix\\'")
+
+;;(use-package helm-spotify-plus)
