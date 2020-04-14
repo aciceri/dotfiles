@@ -34,39 +34,73 @@ in
   
   fonts.fonts = with pkgs; [
     source-code-pro
+    emacs-all-the-icons-fonts
     fira-code
     fira-code-symbols
   ];
 
+  boot.extraModulePackages = with config.boot.kernelPackages; [
+    v4l2loopback  # to use my digital camera as webcam
+  ];
+  
   environment.systemPackages = with pkgs; [ 
-    vim
-    git
+    vim  # useful in case of emergency if logged as root
+    git  # same as above
+    sshfs  # for ssh mounting
     xorg.xorgserver
     xorg.xf86inputevdev
     xorg.xf86videointel
   ];
 
+  fileSystems = let # ~/.ssh/id_rsa.pub content must be appended to ~/.ssh/authorized_keys in the nas
+    nasUser = "andrea";
+    nasHost = "192.168.1.73";
+    fsType = "fuse.sshfs";
+    options = [
+        "delay_connect"
+        "_netdev,user"
+        "idmap=user"
+        "transform_symlinks"
+        "identityfile=/home/andrea/.ssh/id_rsa"
+        "allow_other"
+        "default_permissions"
+        "uid=1000"
+        "gid=100"
+        "nofail" # otherwise if the mounting fails the system will enter emergency mode
+    ];
+  in {
+    "/home/${user.username}/nas/amule" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/amule";
+    };
+    "/home/${user.username}/nas/transmission" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/transmission";
+    };
+    "/home/${user.username}/nas/calibre" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/calibre";
+    };
+    "/home/${user.username}/nas/archivio" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/archivio";
+    };
+    "/home/${user.username}/nas/film" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/film/film";
+    };
+    "/home/${user.username}/nas/syncthing" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/syncthing";
+    };
+  };
+  
   services = {
     openssh.enable = true;
     
     xserver = {
       enable = true;
       displayManager.startx.enable = true;
-      
-      #enable = true;
-      #videoDrivers = ["intel"];
-      #desktopManager.xterm.enable = false;
-      #displayManager = {
-        #session = [
-          #{
-            #manage = "desktop";
-            #name = "custom";
-            #start = "${pkgs.emacsWithPackagesFromUsePackage { config = builtins.readFile ../dotfiles/emacs/init.el; }}/bin/emacsclient -c";
-          #}
-        #];
-        #lightdm.enable =true;
-      #};
-      #windowManager.default = "custom";
     };
 
     redshift = {
@@ -74,31 +108,27 @@ in
     };
     
     mingetty.autologinUser = user.username;
-    
-    emacs = {
-      enable = true;
-      package = import ./custom-pkgs/emacs.nix { pkgs=pkgs; };
-      #package = (pkgs.emacsWithPackagesFromUsePackage {
-      #  config = builtins.readFile ../dotfiles/emacs/init.el;
-      #});
-    };
   };
-  
+
   users.extraUsers.${user.username} = {
     home = "/home/${user.username}";
     isNormalUser = true;
-    uid = 1000;
+    uid = 10000;
     extraGroups = [
       "wheel"
+      "fuse"
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
 
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "andrea" ];
+  
   home-manager.users.${user.username} = args: import ./home.nix (args // { inherit pkgs user; });
 
-  nixpkgs.overlays = [
-    (import sources.emacs-overlay)
-    (import sources.custom-overlay)
+  nixpkgs.overlays = with sources; [
+    (import emacs-overlay)
+    (import custom-overlay)
   ];
 
   system.stateVersion = "20.09";

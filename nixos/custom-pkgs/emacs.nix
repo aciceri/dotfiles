@@ -1,4 +1,5 @@
 { pkgs }:
 pkgs.emacsWithPackagesFromUsePackage {
-    config = builtins.readFile ../../dotfiles/emacs/init.el;
+  config = builtins.readFile ../../dotfiles/emacs/init.el;
+  package = pkgs.emacs;
 }

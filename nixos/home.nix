@@ -14,19 +14,37 @@ in
     exa  # ls replacement
     translate-shell
     ack  # used by Helm for realtime grepping
-    surfraw
-    
+    surfraw  # used by Helm for www searching
+    youtube-dl
+    gphoto2  # to manage my digital camera
+    ffmpeg  # useful to convert and edit my videos
+    busybox 
+    rclone
+    gnupg
+    gitAndTools.git-annex
+    gitAndTools.git-annex-remote-rclone
+    p7zip
+    tree
     
     # Not cli
     zathura
     qutebrowser
     gimp
     rawtherapee
+    spotify
     spotify-adkiller
+    mpv
+    skypeforlinux
+    calibre  # overridden with custom overlay to have unrar support
+
+    # Developing
+    python3
     
     # Games
     cmatrix
     nethack
+    cataclysm-dda
+    angband
   ];
 
   home.file = {
@@ -34,23 +52,8 @@ in
       source = ../dotfiles/emacs;
       recursive = true;
     };
-    "test.txt".text = "${pkgs.dbus}";
-    ".xinitrc".text = ''
-                      #if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-                      #  eval $(dbus-launch --exit-with-session --sh-syntax)
-                      #fi
-                      #systemctl --user import-environment $DISPLAY $XAUTHORITY
-                      #if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-                      #   dbus-update-activation-environment $DISPLAY $XAUTHORITY
-                      #fi
-                      
-                      #xsetroot -cursor_name left_ptr
-                      #exec emacsclient -c -F "'(fullscreen . maximized)"
-                      exec dbus-launch --exit-with-session emacsclient -c -F "'(fullscreen . maximized)"
-                    '';
-    ".zlogin".text = ''
-                     [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && sleep 2 &&exec startx
-                     '';
+    ".xinitrc".source = ../dotfiles/xorg/.xinitrc;
+    ".zlogin".source = ../dotfiles/zsh/.zlogin;
     ".config/qutebrowser/config.py".source = ../dotfiles/qutebrowser/config.py;
   };
 
@@ -88,6 +91,7 @@ in
     };
     shellAliases = {
       "ls" = "exa -l";
+      "webcam-gphoto2" = "gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0";  # to use my digital camera as a webcam
     };
     localVariables = {
       SPACESHIP_TIME_SHOW = "true";

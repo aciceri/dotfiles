@@ -1,16 +1,21 @@
 (require 'use-package)
 
-(setq auto-save-file-name-transforms
-      `((".*" "~/.emacs-saves/" t)))
+(setq backup-directory-alist `(("." . "~/.emacs-saves")))
+(setq backup-by-copying t)
+(setq delete-old-versions t
+  kept-new-versions 6
+  kept-old-versions 2
+  version-control t)
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq use-dialog-box nil)
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode 1)
-(setq display-time-format "%I:%M:%S")
+(setq display-time-format "%H:%M")
 (display-time-mode 1)
-
+(setq mouse-autoselect-window 't)
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
@@ -20,7 +25,12 @@
 
 (package-initialize)
 
+(server-start)
+
+(setq async-shell-command-buffer 'new-buffer)
+
 (use-package doom-themes
+  :after treemacs
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -31,7 +41,7 @@
   (doom-themes-visual-bell-config)
   
   ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
+  ;;(doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
   (doom-themes-treemacs-config)
@@ -44,7 +54,6 @@
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
-
 
 (use-package exwm
   :if window-system
@@ -62,6 +71,10 @@
 	  ([?\s-t] . helm-exwm)
 
 	  ([?\s-q] . kill-current-buffer)
+
+	  ([?\s-m] . (lambda () (interactive)
+		       (async-shell-command "spotify")
+		       (async-shell-command "spotify-adkiller")))
 	  
 	  ([?\s-b] . (lambda () (interactive) ;; starts qutebrowser or get qutebrowser buffers with helm
 		       (if (seq-filter (lambda (buffer) (string-match "qutebrowser" (buffer-name buffer))) (buffer-list))
@@ -100,20 +113,28 @@
 	    (exwm-input-set-key (kbd "s-J") #'windsize-down)
 	    (exwm-input-set-key (kbd "s-K") #'windsize-up)
 	    (exwm-input-set-key (kbd "s-L") #'windsize-right)
-  ))
+	    ))
 
 (use-package evil
   :init
   (setq evil-want-keybinding nil)
   :config
-  (evil-mode 1))
+  (progn
+    (evil-mode 1) ; globally enable evil-mode except for the following mode
+    (mapcar (lambda (mode) (evil-set-initial-state mode 'emacs))
+	   '(vterm-mode
+	     eshell-mode
+	     dired-mode
+	     ))))
 
 (use-package evil-collection
-  :after (evil company-mode)
+  :after (evil company-mode vterm)
   :config
-  (evil-collection-init))
+    (evil-collection-init))
 
 (use-package org-evil)
+
+(use-package vterm)
 
 (use-package helm
   
@@ -159,6 +180,24 @@
   :config (setq helm-exwm-buffer-max-length nil)
 )
 
+(use-package projectile
+  :config
+  (progn
+    (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+    (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+    (projectile-mode +1)))
+
+(use-package helm-projectile
+  :after projectile
+  :config
+  (progn
+    (helm-projectile-on)))
+
+(use-package treemacs)
+
+(use-package treemacs-evil
+  :after treemacs)
+
 (use-package company
   :config (global-company-mode))
 
@@ -167,4 +206,10 @@
 (use-package nix-mode
   :mode "\\.nix\\'")
 
-;;(use-package helm-spotify-plus)
+(use-package company-nixos-options
+  :after company
+  :config
+  (progn
+    (add-to-list 'company-backends 'company-nixos-options)))
+
+(use-package helm-nixos-options)

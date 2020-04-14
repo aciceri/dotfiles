@@ -1,5 +1,5 @@
 {self, super}:
-  super.pkgs.writeScriptBin "spotify"
+  super.pkgs.writeScriptBin "spotify-adkiller"
         ''
         #!${super.pkgs.stdenv.shell}
 
