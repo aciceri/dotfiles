@@ -1,0 +1,36 @@
+Test
+
+#+begin_src emacs-lisp 
+(shell-command-to-string "tree")
+#+end_src
+
+test
+
+#+RESULTS:
+#+begin_example
+.
+├── dotfiles
+│   ├── emacs
+│   │   └── init.el
+│   ├── qutebrowser
+│   │   └── config.py
+│   ├── xorg
+│   └── zsh
+├── nixos
+│   ├── configuration.nix
+│   ├── custom-pkgs
+│   │   ├── calibre.nix
+│   │   ├── default.nix
+│   │   ├── emacs.nix
+│   │   └── spotify-adkiller.nix
+│   ├── home.nix
+│   ├── sources.nix
+│   └── user.nix
+└── README.org
+
+7 directories, 11 files
+#+end_example
+
+#+RESULT
+
+foo
