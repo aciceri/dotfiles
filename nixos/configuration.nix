@@ -52,7 +52,7 @@ in
     xorg.xf86videointel
   ];
 
-  fileSystems = let # ~/.ssh/id_rsa.pub content must be appended to ~/.ssh/authorized_keys in the nas
+  fileSystems = let # my public key must be appended to ~/.ssh/authorized_keys in the nas
     nasUser = "andrea";
     nasHost = "192.168.1.73";
     fsType = "fuse.sshfs";
@@ -111,11 +111,6 @@ in
       enable = true;
     };
 
-    offlineimap = {
-      enable = true;
-      path = [];
-    };
-    
     mingetty.autologinUser = user.username;
   };
 
@@ -131,7 +126,7 @@ in
   };
 
   virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "andrea" ];
+  users.extraGroups.vboxusers.members = [ user.username ];
   
   home-manager.users.${user.username} = args: import ./home.nix (args // { inherit pkgs user; });
 

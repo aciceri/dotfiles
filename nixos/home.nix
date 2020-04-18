@@ -106,9 +106,29 @@ in
 
   programs.git = {
     enable = true;
-    userName = "andrea96";
-    userEmail = "andrea.ciceri@autistici.org";
-    signing.key = "andrea.ciceri@autistici.org";
+    userName = user.githubUsername;
+    userEmail = user.email;
+    signing = {
+      signByDefault = true;
+      key = user.gpgKey;
+    };
+    extraConfig  ={
+      url = {
+        "ssh://git@github.com/" = { insteadOf = https://github.com/; };
+      };
+    };
   };
 
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+    sshKeys = [ user.gpgSshKeygrip ];
+  };
+  
+  programs.gpg = {
+    enable = true;
+    settings = {
+    };
+  };
+  
 }
