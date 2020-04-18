@@ -12,15 +12,18 @@ in
     vim
     git
     exa  # ls replacement
+    pass
+    mailutils
     translate-shell
     ack  # used by Helm for realtime grepping
     surfraw  # used by Helm for www searching
     youtube-dl
     gphoto2  # to manage my digital camera
     ffmpeg  # useful to convert and edit my videos
-    busybox 
+    #gnutls
     rclone
     gnupg
+    pinentry
     gitAndTools.git-annex
     gitAndTools.git-annex-remote-rclone
     p7zip
@@ -97,7 +100,15 @@ in
       SPACESHIP_TIME_SHOW = "true";
       SPACESHIP_USER_SHOW = "always";
       SPACESHIP_HOST_SHOW = "always";
+      EDITOR = "emacsclient";
     };
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "andrea96";
+    userEmail = "andrea.ciceri@autistici.org";
+    signing.key = "andrea.ciceri@autistici.org";
   };
 
 }

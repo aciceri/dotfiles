@@ -9,9 +9,9 @@ c.editor.command = ['emacsclient', '{file}']
 c.scrolling.smooth = False
 c.content.pdfjs = True
 c.scrolling.bar = 'always'
-c.tabs.tabs_are_windows = True
+c.tabs.tabs_are_windows = False  # may be useful setting True and filtering windows with Emacs Helm 
 
-ui_font = '12pt monospace' #I'm getting old and going blind
+ui_font = '12pt monospace'  # I'm getting old and going blind
 c.fonts.completion.category = ui_font
 c.fonts.completion.entry = ui_font
 c.fonts.debug_console = ui_font

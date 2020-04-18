@@ -17,6 +17,8 @@
 (display-time-mode 1)
 (setq mouse-autoselect-window 't)
 
+(setq inhibit-startup-screen t)
+
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
 
@@ -40,9 +42,6 @@
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;;(doom-themes-neotree-config)
-  ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
   (doom-themes-treemacs-config)
   
@@ -63,7 +62,15 @@
     
   (setq exwm-input-global-keys
 	`(
-	  ([?\s-c] . exwm-reset)
+	  ([?\s-c] . exwm-reset) ; works?
+
+	  ([?\s-w] . exwm-workspace-switch)
+	  ,@(mapcar (lambda (i)
+		      `(,(kbd (format "s-%d" i)) .
+			(lambda ()
+			  (interactive)
+			  (exwm-workspace-switch-create ,i))))
+		    (number-sequence 0 9))
 
 	  ([?\s-f] . exwm-layout-toggle-fullscreen)
 	  ([?\s-g] . exwm-floating-toggle-floating)
@@ -75,15 +82,10 @@
 	  ([?\s-m] . (lambda () (interactive)
 		       (async-shell-command "spotify")
 		       (async-shell-command "spotify-adkiller")))
+
+	  ([?\s-b] . (lambda () (interactive)
+		       (start-process "" nil "qutebrowser")))
 	  
-	  ([?\s-b] . (lambda () (interactive) ;; starts qutebrowser or get qutebrowser buffers with helm
-		       (if (seq-filter (lambda (buffer) (string-match "qutebrowser" (buffer-name buffer))) (buffer-list))
-			   (helm-exwm (function (lambda ()
-						  (string-match "qutebrowser" (or exwm-class-name "")))))
-			 (start-process "" nil "qutebrowser"))))
-
-
-     
 	  ([?\s-d] . helm-run-external-command)))
 
  
@@ -94,6 +96,8 @@
   (add-hook 'exwm-floating-setup-hook 'exwm-layout-hide-mode-line)
   (add-hook 'exwm-floating-exit-hook 'exwm-layout-show-mode-line)
 
+  (setq exwm-workspace-show-all-buffers t)
+  
   (setq window-divider-default-bottom-width 2
 	window-divider-default-right-width 2)
   (window-divider-mode)
@@ -120,7 +124,7 @@
   (setq evil-want-keybinding nil)
   :config
   (progn
-    (evil-mode 1) ; globally enable evil-mode except for the following mode
+    (evil-mode 1) ; globally enable evil-mode except for the following modes
     (mapcar (lambda (mode) (evil-set-initial-state mode 'emacs))
 	   '(vterm-mode
 	     eshell-mode
@@ -213,3 +217,5 @@
     (add-to-list 'company-backends 'company-nixos-options)))
 
 (use-package helm-nixos-options)
+
+(use-package nnreddit)

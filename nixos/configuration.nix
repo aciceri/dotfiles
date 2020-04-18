@@ -18,7 +18,7 @@ in
   };
  
   networking.hostName = user.hostname;
- 
+  
   nixpkgs.config = {
     allowUnfree = true;
   };
@@ -94,6 +94,10 @@ in
       device = "${nasUser}@${nasHost}:/mnt/archivio/syncthing";
     };
   };
+
+  programs = {
+    gnupg.agent.enable = true;
+  };
   
   services = {
     openssh.enable = true;
@@ -105,6 +109,11 @@ in
 
     redshift = {
       enable = true;
+    };
+
+    offlineimap = {
+      enable = true;
+      path = [];
     };
     
     mingetty.autologinUser = user.username;
