@@ -4,7 +4,7 @@ This repository contains the configuration of my personal computer,
 while I tried to keep it general and not too specific, this is undoubtedly
 thought for me. I keep my personal information as username or email in a 
 sperated file but this doesn't means that you can simply clone this repository,
-change the personal information and hope that all works perfecly.
+change the personal information and hope that all works perfectly.
 
 In this repository there are two folders:
 
