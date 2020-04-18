@@ -1,4 +1,4 @@
-Dotfiles
+* Dotfiles
 
 This repository contains the configuration of my personal computer,
 while I tried to keep it general and not too specific, this is undoubtedly
