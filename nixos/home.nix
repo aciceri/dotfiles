@@ -6,7 +6,7 @@ in
 {
   home.packages = with pkgs; [
     # Emacs
-    (import ./custom-pkgs/emacs.nix { pkgs=pkgs; })
+    customEmacs
     
     # Cli
     vim
@@ -24,14 +24,21 @@ in
     rclone
     gnupg
     pinentry
-    gitAndTools.git-annex
-    gitAndTools.git-annex-remote-rclone
     p7zip
     tree
+    imagemagick
+    scrot
+    xclip
+    argyllcms
+    xcalib
+    texlive.combined.scheme-full
+    beets
+    
     
     # Not cli
     zathura
     qutebrowser
+    tor-browser-bundle-bin
     gimp
     rawtherapee
     spotify
@@ -39,7 +46,12 @@ in
     mpv
     skypeforlinux
     calibre  # overridden with custom overlay to have unrar support
-
+    riot-desktop
+    signal-desktop
+    tdesktop
+    displaycal
+    xcalib
+    
     # Developing
     python3
     
@@ -48,6 +60,7 @@ in
     nethack
     cataclysm-dda
     angband
+    qemu
   ];
 
   home.file = {
@@ -95,6 +108,7 @@ in
     shellAliases = {
       "ls" = "exa -l";
       "webcam-gphoto2" = "gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0";  # to use my digital camera as a webcam
+      "screenshot" = "scrot '/home/${user.username}/shots/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f' -s";
     };
     localVariables = {
       SPACESHIP_TIME_SHOW = "true";
@@ -130,5 +144,5 @@ in
     settings = {
     };
   };
-  
+
 }

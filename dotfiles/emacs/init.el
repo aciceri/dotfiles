@@ -21,9 +21,11 @@
 
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (add-hook 'prog-mode-hook 'hl-line-mode)
+(add-hook 'org-mode-hook 'auto-fill-mode)
+(set-fill-column 80)
 
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-12"))
-(set-face-attribute 'default t :font "Source Code Pro-12")
+(add-to-list 'default-frame-alist '(font . "Fira Code-12"))
+(set-face-attribute 'default t :font "Fira Code-12")
 
 (package-initialize)
 
@@ -85,6 +87,9 @@
 
 	  ([?\s-b] . (lambda () (interactive)
 		       (start-process "" nil "qutebrowser")))
+
+	  ([?\s-p] . (lambda () (interactive)
+		       (start-process "" nil "screenshot")))
 	  
 	  ([?\s-d] . helm-run-external-command)))
 
@@ -218,4 +223,25 @@
 
 (use-package helm-nixos-options)
 
-(use-package nnreddit)
+(use-package fira-code-mode
+  :hook prog-mode)
+
+(use-package paredit
+  :hook ((lisp-mode
+	  emacs-lisp-mode
+	  ielm-mode
+	  lisp-interaction-mode
+	  scheme-mode
+	  eval-expression-minibuffer-setup) .
+	  paredit-mode)
+  :config (eldoc-add-command 'paredit-backward-delete 'paredit-close-round))
+
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+
+
+;;; Not the correct place for these lines
+(setq show-paren-delay 0)
+(set-face-background 'show-paren-match "#111")
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+(show-paren-mode 1)

@@ -9,4 +9,8 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
 fi
 
 xsetroot -cursor_name left_ptr
+
+exec xcalib dotfiles/dotfiles/xorg/profile.icc &
+exec redshift -l geoclue2 -t 6500:3700 -b 1:1 &
+
 exec dbus-launch --exit-with-session emacs -c -F "'(fullscreen . maximized)"
