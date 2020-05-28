@@ -71,6 +71,7 @@ in
     ".xinitrc".source = ../dotfiles/xorg/.xinitrc;
     ".zlogin".source = ../dotfiles/zsh/.zlogin;
     ".config/qutebrowser/config.py".source = ../dotfiles/qutebrowser/config.py;
+    ".config/beets/config.yaml".source = ../dotfiles/beets/config.yaml;
   };
 
   programs.zsh = {

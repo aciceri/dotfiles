@@ -96,6 +96,10 @@ in
       inherit fsType options;
       device = "${nasUser}@${nasHost}:/mnt/archivio/syncthing";
     };
+    "/home/${user.username}/nas/aria" = {
+      inherit fsType options;
+      device = "${nasUser}@${nasHost}:/mnt/archivio/aria2";
+    };
     "/home/${user.username}/nas/musica" = {
       inherit fsType options;
       device = "${nasUser}@${nasHost}:/mnt/film/musica";
