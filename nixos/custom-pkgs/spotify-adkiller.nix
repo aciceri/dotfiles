@@ -11,7 +11,7 @@
         }
 
         is_playing_ad() {
-            [ "$1" = "Advertisement" -o "$1" = "Spotify" ] && return 0 || return 1
+            [ "$1" = "Advertisement" -o "$1" = "Spotify" -o "$1" = "" ] && return 0 || return 1
         }
 
         if is_spotify_running 
@@ -27,8 +27,8 @@
         do
             if ! is_spotify_running      
             then
-        echo "Spotify has been closed"
-        exit 0
+                echo "Spotify has been closed"
+                exit 0
             fi
 
             title=$(${self.pkgs.playerctl}/bin/playerctl metadata --format "{{title}}")

@@ -4,9 +4,9 @@ import:
     copy: yes
     write: yes
     resume: ask
-    log: ~/nas/musica/beets.log
+    log: ~/nas/musica/beet.log
 ui:
     color: yes
-plugins: fetchart convert
+plugins: fetchart embedart convert edit
 convert:
     auto: yes

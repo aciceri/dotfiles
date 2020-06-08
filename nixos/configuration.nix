@@ -117,7 +117,7 @@ in
       enable = true;
       displayManager.startx.enable = true;
     };
-    
+
     mingetty.autologinUser = user.username;
   };
 
@@ -144,5 +144,5 @@ in
   ];
 
   system.stateVersion = "20.03";
-
+ 
 }  

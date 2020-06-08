@@ -33,11 +33,13 @@ in
     xcalib
     texlive.combined.scheme-full
     beets
+    redshift
     
     
     # Not cli
     zathura
     qutebrowser
+    (firefox.override { extraNativeMessagingHosts = [ passff-host ]; })
     tor-browser-bundle-bin
     gimp
     rawtherapee
@@ -51,6 +53,7 @@ in
     tdesktop
     displaycal
     xcalib
+    postman  # temporary
     
     # Developing
     python3
@@ -139,7 +142,7 @@ in
     enableSshSupport = true;
     sshKeys = [ user.gpgSshKeygrip ];
   };
-  
+
   programs.gpg = {
     enable = true;
     settings = {

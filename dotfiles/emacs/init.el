@@ -239,6 +239,9 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package pass)
+(use-package helm-pass)
+
 
 ;;; Not the correct place for these lines
 (setq show-paren-delay 0)
