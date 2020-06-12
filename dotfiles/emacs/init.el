@@ -248,3 +248,15 @@
 (set-face-background 'show-paren-match "#111")
 (set-face-attribute 'show-paren-match nil :weight 'extra-bold)
 (show-paren-mode 1)
+
+(use-package emms
+  :config
+  (progn
+    (require 'emms-setup)
+    (require 'emms-player-mpd)
+    (setq emms-player-mpd-server-name "localhost")
+    (setq emms-player-mpd-server-port "6600")
+    (add-to-list 'emms-info-functions 'emms-info-mpd)
+    (add-to-list 'emms-player-list 'emms-player-mpd)
+    (emms-all)
+    ))

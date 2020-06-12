@@ -24,7 +24,6 @@ in
     rclone
     gnupg
     pinentry
-    p7zip
     tree
     imagemagick
     scrot
@@ -137,6 +136,19 @@ in
     };
   };
 
+  services.mpd = {
+    enable = true;
+    musicDirectory = "/home/${user.username}/nas/musica/";
+    network.listenAddress = "::";
+    network.port = 6600;
+    extraConfig = ''
+      audio_output {
+        type    "pulse"
+        name    "MPD"
+      }
+    '';
+  };
+  
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;

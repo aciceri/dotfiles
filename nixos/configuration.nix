@@ -18,9 +18,13 @@ in
   };
  
   networking.hostName = user.hostname;
+  networking.firewall.allowedTCPPorts = [
+    6600  # MPD
+  ];
 
   nixpkgs.config = {
     allowUnfree = true;
+    # allowBroken = true;
   };
 
   networking.dhcpcd.enable = true;
