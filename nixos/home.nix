@@ -46,13 +46,17 @@ in
     spotify-adkiller
     mpv
     skypeforlinux
-    calibre  # overridden with custom overlay to have unrar support
+    (calibre.override {
+      unrarSupport = true;  # why doesn't work?
+    }) 
     riot-desktop
     signal-desktop
     tdesktop
     displaycal
     xcalib
     postman  # temporary
+
+    libvterm
     
     # Developing
     python3
@@ -148,7 +152,7 @@ in
       }
     '';
   };
-  
+
   services.gpg-agent = {
     enable = true;
     enableSshSupport = true;

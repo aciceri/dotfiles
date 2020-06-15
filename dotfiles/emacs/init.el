@@ -254,9 +254,28 @@
   (progn
     (require 'emms-setup)
     (require 'emms-player-mpd)
+    (require 'emms-volume)
     (setq emms-player-mpd-server-name "localhost")
     (setq emms-player-mpd-server-port "6600")
+    (setq emms-volume-change-function 'emms-volume-mpd-change)
     (add-to-list 'emms-info-functions 'emms-info-mpd)
     (add-to-list 'emms-player-list 'emms-player-mpd)
     (emms-all)
+
+    (emms-cache-set-from-mpd-all)
     ))
+
+(use-package elfeed
+  :config (setq elfeed-feeds
+		'("http://nullprogram.com/feed/"
+		  "http://planet.emacsen.org/atom.xml")))
+
+(use-package elfeed-org
+  :requires elfeed
+  :config (progn
+	    (elfeed-org)
+	    (setq rmh-elfeed-org-files (list "~/.emacs.d/feeds/feeds.org"))))
+
+(use-package elfeed-goodies
+  :requires elfeed
+  :config (elfeed-goodies/setup))

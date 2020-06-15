@@ -112,6 +112,7 @@ in
 
   programs = {
     gnupg.agent.enable = true;
+    adb.enable = true;
   };
   
   services = {
@@ -133,6 +134,7 @@ in
       "wheel"
       "fuse"
       "video"
+      "adbusers"
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
@@ -148,5 +150,5 @@ in
   ];
 
   system.stateVersion = "20.03";
- 
+  
 }  

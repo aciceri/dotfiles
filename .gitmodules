@@ -1,0 +1,3 @@
+[submodule "dotfiles/emacs/feeds"]
+	path = dotfiles/emacs/feeds
+	url = https://github.com/aciceri/feeds.git
