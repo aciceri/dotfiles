@@ -224,7 +224,8 @@
 (use-package helm-nixos-options)
 
 (use-package fira-code-mode
-  :hook prog-mode)
+  :hook prog-mode
+  :config (setq fira-code-mode-disabled-ligatures '("x")))
 
 (use-package paredit
   :hook ((lisp-mode
@@ -265,17 +266,43 @@
     (emms-cache-set-from-mpd-all)
     ))
 
-(use-package elfeed
-  :config (setq elfeed-feeds
-		'("http://nullprogram.com/feed/"
-		  "http://planet.emacsen.org/atom.xml")))
-
 (use-package elfeed-org
-  :requires elfeed
   :config (progn
 	    (elfeed-org)
-	    (setq rmh-elfeed-org-files (list "~/.emacs.d/feeds/feeds.org"))))
+	    (setq rmh-elfeed-org-files (list "~/.emacs.d/feeds/feeds.org"))
 
-(use-package elfeed-goodies
-  :requires elfeed
-  :config (elfeed-goodies/setup))
+	    (defun elfeed-v-mpv (url)
+  "Watch a video from URL in MPV"
+  (async-shell-command (format "mpv %s" url)))
+
+(defun elfeed-view-mpv (&optional use-generic-p)
+  "Youtube-feed link"
+  (interactive "P")
+  (let ((entries (elfeed-search-selected)))
+    (cl-loop for entry in entries
+	     do (elfeed-untag entry 'unread)
+	     when (elfeed-entry-link entry)
+	     do (elfeed-v-mpv it))
+    (mapc #'elfeed-search-update-entry entries)
+    (unless (use-region-p) (forward-line))))
+
+(define-key elfeed-search-mode-map (kbd "v") 'elfeed-view-mpv)))
+
+(use-package edit-server
+  :ensure t
+  :commands edit-server-start
+  :init (if after-init-time
+              (edit-server-start)
+            (add-hook 'after-init-hook
+                      #'(lambda() (edit-server-start))))
+  :config (setq edit-server-new-frame-alist
+                '((name . "Edit with Emacs FRAME")
+                  (top . 200)
+                  (left . 200)
+                  (width . 80)
+                  (height . 25)
+                  (minibuffer . t)
+                  (menu-bar-lines . t)
+                  (window-system . x))))
+
+(use-package notmuch)
