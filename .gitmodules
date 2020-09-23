@@ -1,0 +1,3 @@
+[submodule "dotfiles/emacs"]
+	path = dotfiles/emacs
+	url = git@github.com:aciceri/emacs.git
