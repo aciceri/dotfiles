@@ -1,8 +1,9 @@
 {self, super}:
 super.pkgs.emacsWithPackagesFromUsePackage {
-  config = builtins.readFile ../../dotfiles/emacs/init.el;
+  config = ../../dotfiles/emacs/README.org;
   alwaysEnsure = true;
-  package = (super.pkgs.emacs.override({
+  alwaysTangle = true;
+  package = (super.pkgs.emacsUnstable.override({
     imagemagick = super.pkgs.imagemagick;
   })).overrideAttrs(old: rec {
     configureFlags = (old.configureFlags or []) ++ ["--with-imagemagick"];

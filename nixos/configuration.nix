@@ -21,10 +21,15 @@ in
   networking.firewall.allowedTCPPorts = [
     6600  # MPD
   ];
-
+  
   nixpkgs.config = {
     allowUnfree = true;
     # allowBroken = true;
+    packageOverrides = pkgs: {
+      nur = import (builtins.fetchTarball "https://github.com/nix-community/NUR/archive/master.tar.gz") {
+        inherit pkgs;
+      };
+    };
   };
 
   networking.dhcpcd.enable = true;
@@ -32,6 +37,10 @@ in
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
+  hardware.opengl.driSupport32Bit = true;
+  hardware.opengl.enable = true;
+  hardware.pulseaudio.support32Bit = true;
+  
   time.timeZone = "Europe/Rome";
   location.provider = "geoclue2";
   
@@ -45,6 +54,16 @@ in
   boot.extraModulePackages = with config.boot.kernelPackages; [
     v4l2loopback  # to use my digital camera as webcam
   ];
+
+  services.udev.extraRules = ''
+    # To flash devices with Caterina bootloader
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2a03", ATTRS{idProduct}=="0036", TAG+="uaccess", RUN{builtin}+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="0036", TAG+="uaccess", RUN{builtin}+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1b4f", ATTRS{idProduct}=="9205", TAG+="uaccess", RUN{builtin}+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1b4f", ATTRS{idProduct}=="9203", TAG+="uaccess", RUN{builtin}+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
+    # To use the HID protocol
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="users"
+  '';
   
   environment.systemPackages = with pkgs; [ 
     vim  # useful in case of emergency if logged as root
@@ -117,10 +136,11 @@ in
   
   services = {
     openssh.enable = true;
-    
+
     xserver = {
       enable = true;
       displayManager.startx.enable = true;
+      layout = "us"; #"dvorak";
     };
 
     mingetty.autologinUser = user.username;
@@ -135,11 +155,15 @@ in
       "fuse"
       "video"
       "adbusers"
+      "docker"
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
-
-  virtualisation.virtualbox.host.enable = true;
+  
+  virtualisation = {
+    virtualbox.host.enable = true;
+    docker.enable = true;
+  };
   users.extraGroups.vboxusers.members = [ user.username ];
   
   home-manager.users.${user.username} = args: import ./home.nix (args // { inherit pkgs user; });
@@ -150,5 +174,5 @@ in
   ];
 
   system.stateVersion = "20.03";
-  
+
 }  

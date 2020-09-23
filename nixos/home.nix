@@ -33,6 +33,15 @@ in
     texlive.combined.scheme-full
     beets
     redshift
+    xcompmgr  # test
+    xorg.transset  # test
+    openbox  # test
+    nur.repos.mic92.nixos-shell
+    nixops
+    go-ethereum
+    solc  # solidty compiler
+    guile
+    clisp
     
     
     # Not cli
@@ -52,21 +61,37 @@ in
     riot-desktop
     signal-desktop
     tdesktop
+    discord
+    deltachat-electron
     displaycal
     xcalib
     postman  # temporary
 
     libvterm
+
+    # Job
+    citrix_workspace
+    teams
+    remmina
     
     # Developing
-    python3
+    (python3.withPackages (ps: with ps; [
+      matplotlib
+      gpxpy
+    ]))
     
     # Games
     cmatrix
     nethack
     cataclysm-dda
     angband
+    lutris
+    vulkan-tools
+    gnome3.adwaita-icon-theme
+    wineWowPackages.stable
+    winetricks
     qemu
+    dolphinEmu
   ];
 
   home.file = {
@@ -78,6 +103,7 @@ in
     ".zlogin".source = ../dotfiles/zsh/.zlogin;
     ".config/qutebrowser/config.py".source = ../dotfiles/qutebrowser/config.py;
     ".config/beets/config.yaml".source = ../dotfiles/beets/config.yaml;
+    ".guile".source = ../dotfiles/guile/.guile;
   };
 
   programs.zsh = {
@@ -162,6 +188,45 @@ in
   programs.gpg = {
     enable = true;
     settings = {
+    };
+  };
+
+  programs.mbsync.enable = true;
+  programs.msmtp.enable = true;
+  programs.notmuch = {
+    enable = true;
+    hooks = {
+      preNew = "mbsync --all";
+    };
+  };
+
+  accounts.email = {
+    accounts.autistici = {
+      address = "andrea.ciceri@autistici.org";
+      gpg = {
+        key = user.gpgSshKeygrip;
+        signByDefault = true;
+      };
+      imap.host = "mail.autistici.org";
+      mbsync = {
+        enable = true;
+        create = "maildir";
+      };
+      msmtp.enable = true;
+      notmuch.enable = true;
+      primary = true;
+      realName = "Andrea Ciceri";
+      signature = {
+        text = ''
+          La mia firma!
+        '';
+        showSignature = "append";
+      };
+      passwordCommand = "pass show autistici/password";
+      smtp = {
+        host = "smtp.autistici.org";
+      };
+      userName = "andrea.ciceri@autistici.org";
     };
   };
 
