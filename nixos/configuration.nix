@@ -21,6 +21,11 @@ in
   networking.firewall.allowedTCPPorts = [
     6600  # MPD
   ];
+  networking.extraHosts = ''
+    127.0.0.1 wibcontainerbe
+    127.0.0.1 wibcontainerfe
+    51.107.71.60 inledger.ch
+  '';
   
   nixpkgs.config = {
     allowUnfree = true;
@@ -80,7 +85,7 @@ in
   # So it's needed to generate a ssh keypair with ssh-agent only for this purpose.
   fileSystems = let
     nasUser = "andrea";
-    nasHost = "192.168.1.73";
+    nasHost = "ccr.ydns.eu";
     fsType = "fuse.sshfs";
     options = [
         "delay_connect"
@@ -141,9 +146,23 @@ in
       enable = true;
       displayManager.startx.enable = true;
       layout = "us"; #"dvorak";
+      desktopManager.xfce.enable = true;
+      displayManager = { # this is an experiment to test xfce (for the second monitor)
+        defaultSession = "xfce";
+      };
     };
 
     mingetty.autologinUser = user.username;
+
+    printing = {
+      enable = true;
+      drivers = [pkgs.hplip];
+    };
+
+    avahi = {
+      enable = true;
+      nssmdns = true;
+    }; 
   };
 
   users.extraUsers.${user.username} = {
@@ -159,7 +178,7 @@ in
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
-  
+
   virtualisation = {
     virtualbox.host.enable = true;
     docker.enable = true;

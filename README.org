@@ -21,7 +21,7 @@ in ~/etc/nixos/~ with ~nixos-rebuild~ and then I symlink ~/etc/nixos/configurati
 the ~configuration.nix~ in my repository:
 
 #+begin_src shell
-ln -s ~/dotfiles/configuration.nix /etc/nixos/configuration.nix
+ln -s ~/dotfiles/nixos/configuration.nix /etc/nixos/configuration.nix
 #+end_src
 
 

@@ -42,12 +42,12 @@ in
     solc  # solidty compiler
     guile
     clisp
+    rclone
     
     
     # Not cli
     zathura
     qutebrowser
-    (firefox.override { extraNativeMessagingHosts = [ passff-host ]; })
     tor-browser-bundle-bin
     gimp
     rawtherapee
@@ -69,16 +69,24 @@ in
 
     libvterm
 
+    obs-studio
+
     # Job
     citrix_workspace
     teams
     remmina
+    vscode
+    docker
     
     # Developing
     (python3.withPackages (ps: with ps; [
       matplotlib
       gpxpy
+      pip
     ]))
+    yarn2nix
+    yarn
+    nodejs
     
     # Games
     cmatrix
@@ -151,6 +159,52 @@ in
     };
   };
 
+  programs.firefox = {
+    enable = true;
+    package = (pkgs.firefox.override { extraNativeMessagingHosts = [
+      # pkgs.browserpass
+      pkgs.passff-host
+    ]; });
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      https-everywhere
+      privacy-badger
+      ublock-origin
+      react-devtools
+      org-capture
+      clearurls
+      # browserpass  # not working, manually installed passff
+      firefox-color
+      darkreader
+      cookie-autodelete
+      # and manually installed ghost-text for atomic-chrome
+    ];
+    profiles."${user.username}" = {
+      id = 0;  # implies isDefault = true
+      settings = {
+        "browser.startup.homepage" = "https://google.it";
+        "browser.search.region" = "IT";
+        "browser.search.isUS" = false;
+        "distribution.searchplugins.defaultLocale" = "it-IT";
+        "general.useragent.locale" = "it-IT";
+        "browser.bookmarks.showMobileBookmarks" = true;
+      };
+      userChrome = ''
+        /* Hide tab bar in FF Quantum * /
+        @-moz-document url("chrome://browser/content/browser.xul") {
+          #TabsToolbar {
+          visibility: collapse !important;
+            margin-bottom: 21px !important;
+          }
+
+          #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+           visibility: collapse !important;
+          }
+        }
+        '';
+        userContent = "";
+    };
+  };
+
   programs.git = {
     enable = true;
     userName = user.githubUsername;
@@ -164,6 +218,14 @@ in
         "ssh://git@github.com/" = { insteadOf = https://github.com/; };
       };
     };
+  };
+
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      Host *
+      KexAlgorithms +diffie-hellman-group1-sha1
+    '';
   };
 
   services.mpd = {
