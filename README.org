@@ -24,6 +24,27 @@ the ~configuration.nix~ in my repository:
 ln -s ~/dotfiles/nixos/configuration.nix /etc/nixos/configuration.nix
 #+end_src
 
+Also, a file ~nixos/user.nix~ is needed, e.g.:
+
+#+begin_src nix
+let 
+  notebook = true;
+in
+{
+  username = "andrea";
+  name = "Andrea Ciceri";
+  email = "andrea.ciceri@autistici.org";
+  hostname = if notebook then "notebook" else "pc";
+  githubUsername = "aciceri";
+  
+  gpgKey = "andrea.ciceri@autistici.org";
+  gpgSshKeygrip = "CE2FD0D9BECBD8876811714925066CC257413416";
+}
+#+end_src
+
+Since there is an unique configuaration for both my notebook and desktop, the varaible
+~notebook~ is used to keep track of this.
+Setting it ~true~ or ~false~ may have drastically different consequences
 
 ** NixOS
    + ~user.nix~ defines some personal information
