@@ -115,7 +115,7 @@ in
         menu = "${pkgs.bemenu}/bin/bemenu-run -b -m 1";
         output = {
           LVDS-1 = {
-            bg = "~/downloads/wallpaper.jpg fill";
+            bg = "~/dotfiles/dotfiles/xorg/wallpaper.jpg fill";
           };
         };
         fonts = [ "Font Awesome" "Fira Code" ];
