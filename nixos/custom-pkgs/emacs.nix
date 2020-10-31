@@ -4,8 +4,10 @@ super.pkgs.emacsWithPackagesFromUsePackage {
   alwaysEnsure = true;
   alwaysTangle = true;
   package = (super.pkgs.emacsUnstable.override({
-    imagemagick = super.pkgs.imagemagick;
+   imagemagick = super.pkgs.imagemagick;
   })).overrideAttrs(old: rec {
-    configureFlags = (old.configureFlags or []) ++ ["--with-imagemagick"];
+    configureFlags = (old.configureFlags or []) ++ [
+     "--with-imagemagick"
+    ];
   });
 }

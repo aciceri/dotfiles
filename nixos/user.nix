@@ -1,8 +1,11 @@
+let 
+  notebook = true;
+in
 {
   username = "andrea";
   name = "Andrea Ciceri";
   email = "andrea.ciceri@autistici.org";
-  hostname = "pc";
+  hostname = if notebook then "notebook" else "pc";
   githubUsername = "aciceri";
   
   gpgKey = "andrea.ciceri@autistici.org";

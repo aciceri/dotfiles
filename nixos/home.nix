@@ -5,9 +5,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    # Emacs
-    customEmacs
-    
     # Cli
     vim
     git
@@ -32,20 +29,16 @@ in
     xcalib
     texlive.combined.scheme-full
     beets
-    redshift
-    xcompmgr  # test
-    xorg.transset  # test
-    openbox  # test
     nur.repos.mic92.nixos-shell
     nixops
     go-ethereum
-    solc  # solidty compiler
     guile
     clisp
     rclone
-    
+    wl-clipboard
     
     # Not cli
+    bemenu
     zathura
     qutebrowser
     tor-browser-bundle-bin
@@ -54,31 +47,22 @@ in
     spotify
     spotify-adkiller
     mpv
-    skypeforlinux
     (calibre.override {
       unrarSupport = true;  # why doesn't work?
     }) 
-    riot-desktop
-    signal-desktop
+    element-desktop
     tdesktop
     discord
-    deltachat-electron
     displaycal
     xcalib
-    postman  # temporary
 
     libvterm
 
-    obs-studio
-
-    # Job
     citrix_workspace
     teams
     remmina
-    vscode
-    docker
     
-    # Developing
+    # DEVELOPING
     (python3.withPackages (ps: with ps; [
       matplotlib
       gpxpy
@@ -87,12 +71,20 @@ in
     yarn2nix
     yarn
     nodejs
+   
+    xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
+    #pipewire
+    pipewire_0_2
+
+    ipfs
     
     # Games
     cmatrix
+    tmatrix
     nethack
     cataclysm-dda
     angband
+    retroarch
     lutris
     vulkan-tools
     gnome3.adwaita-icon-theme
@@ -107,13 +99,92 @@ in
       source = ../dotfiles/emacs;
       recursive = true;
     };
-    ".xinitrc".source = ../dotfiles/xorg/.xinitrc;
     ".zlogin".source = ../dotfiles/zsh/.zlogin;
     ".config/qutebrowser/config.py".source = ../dotfiles/qutebrowser/config.py;
     ".config/beets/config.yaml".source = ../dotfiles/beets/config.yaml;
     ".guile".source = ../dotfiles/guile/.guile;
   };
 
+  wayland = {
+    windowManager.sway = let
+      modifier = "Mod4";
+    in {
+      enable = true;
+      config = {
+        modifier = modifier;
+        menu = "${pkgs.bemenu}/bin/bemenu-run -b -m 1";
+        output = {
+          LVDS-1 = {
+            bg = "~/downloads/wallpaper.jpg fill";
+          };
+        };
+        fonts = [ "Font Awesome" "Fira Code" ];
+        terminal = "alacritty";
+        bars = [{
+          command = "${pkgs.waybar}/bin/waybar";
+        }];
+        startup = [{
+          command = "systemctl --user restart redshift";
+          always = true;
+        }];
+      };
+      extraConfig = ''
+        bindsym ${modifier}+p move workspace to output right
+      '';
+      xwayland = true;
+      systemdIntegration = false;
+    };
+  };
+
+  programs.waybar = {
+    enable = true;
+    style = builtins.readFile ../dotfiles/waybar/style.css;
+    settings = [{
+      layer = "top";
+      position = "top";
+      height = 30;
+      output = [
+        "LVDS-1"
+      ];
+      modules-left = [ "sway/workspaces" "sway/mode" ];
+      modules-center = [ "sway/window" ];
+      modules-right = [ "cpu" "network" "mpd" "clock" ];
+      modules = {
+        "sway/workspaces" = {
+          disable-scroll = true;
+          all-outputs = false;
+        };
+        "network" = {
+          format-ethernet = "{ipaddr} - {bandwidthDownBits} - {bandwidthUpBits}";
+        };
+        "cpu" = {
+          interval = 1;
+        };
+        "clock" = {
+          format = "{:%d %b %H:%M}";          
+        };
+      };
+    }];
+  };
+  
+  services.redshift = {
+    enable = true;
+    temperature = {
+      day = 6500;
+      night = 3700;
+    };
+    provider = "geoclue2";
+    package = pkgs.redshift-wlr;
+  };
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      font.normal.family = "Fira Code";
+      background_opacity = 0.85;
+    };
+  };
+  
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
@@ -134,7 +205,11 @@ in
         src = pkgs.zsh-syntax-highlighting;
         file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
       }
-      
+      {
+        name = "zsh-nix-shell";
+        file = "nix-shell.plugin.zsh";
+        src = pkgs.zsh-nix-shell;
+      }
     ];
     oh-my-zsh = {
       enable = true;
@@ -150,18 +225,27 @@ in
       "ls" = "exa -l";
       "webcam-gphoto2" = "gphoto2 --stdout --capture-movie | ffmpeg -i - -vcodec rawvideo -pix_fmt yuv420p -threads 0 -f v4l2 /dev/video0";  # to use my digital camera as a webcam
       "screenshot" = "scrot '/home/${user.username}/shots/%F_%T_$wx$h.png' -e 'xclip -selection clipboard -target image/png -i $f' -s";
+      "em" = "emacsclient -c";
+      "emnw" = "emacsclient -c -nw";
     };
     localVariables = {
       SPACESHIP_TIME_SHOW = "true";
       SPACESHIP_USER_SHOW = "always";
       SPACESHIP_HOST_SHOW = "always";
       EDITOR = "emacsclient";
+      NIX_BUILD_SHELL = "${pkgs.zsh-nix-shell}/scripts/buildShellShim.zsh";
+      PROMPT = "\\\${IN_NIX_SHELL:+[nix-shell] }$PROMPT";
     };
   };
 
+  programs.vscode = {
+    enable = true;
+    package = pkgs.vscode;
+  };
+  
   programs.firefox = {
     enable = true;
-    package = (pkgs.firefox.override { extraNativeMessagingHosts = [
+    package = (pkgs.firefox-wayland.override { extraNativeMessagingHosts = [
       # pkgs.browserpass
       pkgs.passff-host
     ]; });
@@ -187,6 +271,8 @@ in
         "distribution.searchplugins.defaultLocale" = "it-IT";
         "general.useragent.locale" = "it-IT";
         "browser.bookmarks.showMobileBookmarks" = true;
+        "browser.download.folderList" = 2;
+        "browser.download.lastDir" = "/home/${user.username}/downloads/";
       };
       userChrome = ''
         /* Hide tab bar in FF Quantum * /
@@ -239,6 +325,10 @@ in
         name    "MPD"
       }
     '';
+  };
+
+  programs.ncmpcpp = {
+    enable = true;
   };
 
   services.gpg-agent = {

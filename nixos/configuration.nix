@@ -5,7 +5,7 @@ let
   sources = import ./sources.nix;
 in
 {
- 
+  
   imports = builtins.filter builtins.pathExists [
     sources.home-manager
     /etc/nixos/hardware-configuration.nix
@@ -24,7 +24,6 @@ in
   networking.extraHosts = ''
     127.0.0.1 wibcontainerbe
     127.0.0.1 wibcontainerfe
-    51.107.71.60 inledger.ch
   '';
   
   nixpkgs.config = {
@@ -38,7 +37,8 @@ in
   };
 
   networking.dhcpcd.enable = true;
-
+  networking.networkmanager.enable = true;
+  
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
@@ -50,10 +50,15 @@ in
   location.provider = "geoclue2";
   
   fonts.fonts = with pkgs; [
-    source-code-pro
+    #source-code-pro
     emacs-all-the-icons-fonts
     fira-code
     fira-code-symbols
+    font-awesome
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+    nerdfonts
   ];
 
   boot.extraModulePackages = with config.boot.kernelPackages; [
@@ -68,6 +73,8 @@ in
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="1b4f", ATTRS{idProduct}=="9203", TAG+="uaccess", RUN{builtin}+="uaccess", ENV{ID_MM_DEVICE_IGNORE}="1"
     # To use the HID protocol
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0664", GROUP="users"
+    # USBasp
+    SYSFS{idVendor}=="16c0", SYSFS{idProduct}=="05dc", MODE="0666"
   '';
   
   environment.systemPackages = with pkgs; [ 
@@ -142,18 +149,14 @@ in
   services = {
     openssh.enable = true;
 
-    xserver = {
+    emacs = {
       enable = true;
-      displayManager.startx.enable = true;
-      layout = "us"; #"dvorak";
-      desktopManager.xfce.enable = true;
-      displayManager = { # this is an experiment to test xfce (for the second monitor)
-        defaultSession = "xfce";
-      };
+      package = pkgs.customEmacs;
+      defaultEditor = true;
     };
-
+    
     mingetty.autologinUser = user.username;
-
+    
     printing = {
       enable = true;
       drivers = [pkgs.hplip];
@@ -162,7 +165,12 @@ in
     avahi = {
       enable = true;
       nssmdns = true;
-    }; 
+    };
+
+    pipewire = {
+      enable = true;
+      socketActivation = true;	
+    };
   };
 
   users.extraUsers.${user.username} = {
@@ -175,6 +183,8 @@ in
       "video"
       "adbusers"
       "docker"
+      "networkmanager"
+      "dialout"
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
@@ -192,6 +202,6 @@ in
     (import custom-overlay)
   ];
 
-  system.stateVersion = "20.03";
+  system.stateVersion = "20.09";
 
 }  
