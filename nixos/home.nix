@@ -58,7 +58,7 @@ in
 
     libvterm
 
-    citrix_workspace
+    #citrix_workspace
     teams
     remmina
     
@@ -113,8 +113,14 @@ in
       config = {
         modifier = modifier;
         menu = "${pkgs.bemenu}/bin/bemenu-run -b -m 1";
-        output = {
+        output = if user.notebook then 
+	      {
           LVDS-1 = {
+            bg = "~/dotfiles/dotfiles/xorg/wallpaper.jpg fill";
+          };
+        } else
+        {
+          HDMI-A-2 = {
             bg = "~/dotfiles/dotfiles/xorg/wallpaper.jpg fill";
           };
         };
@@ -143,8 +149,11 @@ in
       layer = "top";
       position = "top";
       height = 30;
-      output = [
+      output = if user.notebook then [
         "LVDS-1"
+      ] else
+      [
+        "HDMI-A-2"
       ];
       modules-left = [ "sway/workspaces" "sway/mode" ];
       modules-center = [ "sway/window" ];
