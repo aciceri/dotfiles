@@ -39,6 +39,8 @@ in
   
   gpgKey = "andrea.ciceri@autistici.org";
   gpgSshKeygrip = "CE2FD0D9BECBD8876811714925066CC257413416";
+  
+  inherit notebook;
 }
 #+end_src
 
