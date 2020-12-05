@@ -151,7 +151,7 @@ in
     openssh.enable = true;
 
     emacs = {
-      enable = user.notebook;  # temporarily disabled on the notebook (compiling too long)
+      enable = true;
       package = pkgs.customEmacs;
       defaultEditor = true;
     };
