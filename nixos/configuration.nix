@@ -9,6 +9,7 @@ in
   imports = builtins.filter builtins.pathExists [
     sources.home-manager
     /etc/nixos/hardware-configuration.nix
+    /etc/nixos/cachix.nix
   ];
   
   boot.loader.grub = {
@@ -150,7 +151,7 @@ in
     openssh.enable = true;
 
     emacs = {
-      enable = true;
+      enable = user.notebook;  # temporarily disabled on the notebook (compiling too long)
       package = pkgs.customEmacs;
       defaultEditor = true;
     };
@@ -167,10 +168,20 @@ in
       nssmdns = true;
     };
 
-    pipewire = {
-      enable = true;
-      socketActivation = true;	
+    transmission = {
+      enable = user.notebook;  # enabled only on notebook
+      port = 9091;
+      settings = {
+        download-dir = "/home/${user.username}/transmission";
+        incomplete-dir = "/home/${user.username}/transmission/.incomplete";
+        incomplete-dir-enabled = true;
+        rpc-whitelist-enabled = false;
+        rpc-authentication-required = true;
+        rpc-username = user.transmission.username;
+        rpc-password = user.transmission.password;
+      };
     };
+
   };
 
   users.extraUsers.${user.username} = {
@@ -188,6 +199,11 @@ in
     ];
     shell = "${pkgs.zsh}/bin/zsh";
   };
+
+  nix.trustedUsers = [
+    "root"
+    "${user.username}"
+  ];
 
   virtualisation = {
     virtualbox.host.enable = true;

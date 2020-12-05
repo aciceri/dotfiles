@@ -31,12 +31,11 @@ in
     beets
     nur.repos.mic92.nixos-shell
     nixops
-    go-ethereum
     guile
-    clisp
     rclone
     wl-clipboard
-    
+    gcc  # gccEmacs needs its binaries in PATH
+
     # Not cli
     bemenu
     zathura
@@ -53,31 +52,23 @@ in
     element-desktop
     tdesktop
     discord
-    displaycal
-    xcalib
 
-    libvterm
-
-    #citrix_workspace
+    citrix_workspace
     teams
     remmina
+    chromium
     
     # DEVELOPING
     (python3.withPackages (ps: with ps; [
-      matplotlib
-      gpxpy
       pip
+      black
     ]))
     yarn2nix
     yarn
     nodejs
-   
-    xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk
-    #pipewire
-    pipewire_0_2
 
-    ipfs
-    
+    nomachine-client
+   
     # Games
     cmatrix
     tmatrix
@@ -87,7 +78,6 @@ in
     retroarch
     lutris
     vulkan-tools
-    gnome3.adwaita-icon-theme
     wineWowPackages.stable
     winetricks
     qemu
