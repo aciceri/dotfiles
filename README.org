@@ -40,6 +40,11 @@ in
   gpgKey = "andrea.ciceri@autistici.org";
   gpgSshKeygrip = "CE2FD0D9BECBD8876811714925066CC257413416";
   
+  transmission = {  # installed only if on notebook, usually I run it on my NAS
+    username = "andrea";
+    password = "password";
+  };
+  
   inherit notebook;
 }
 #+end_src
