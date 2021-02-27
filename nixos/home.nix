@@ -52,6 +52,8 @@ in
     element-desktop
     tdesktop
     discord
+    deltachat-electron 
+    gnome3.adwaita-icon-theme
 
     citrix_workspace
     teams
@@ -68,7 +70,9 @@ in
     nodejs
 
     nomachine-client
-   
+  
+    monero-gui
+ 
     # Games
     cmatrix
     tmatrix
@@ -82,6 +86,11 @@ in
     winetricks
     qemu
     dolphinEmu
+
+    # Test
+    pipewire
+    xdg-desktop-portal
+    xdg-desktop-portal-wlr
   ];
 
   home.file = {
@@ -126,6 +135,8 @@ in
       };
       extraConfig = ''
         bindsym ${modifier}+p move workspace to output right
+        exec systemctl --user import-environment
+        exec systemctl --user start graphical-session.target
       '';
       xwayland = true;
       systemdIntegration = false;
@@ -312,7 +323,7 @@ in
       KexAlgorithms +diffie-hellman-group1-sha1
     '';
   };
-
+  
   services.mpd = {
     enable = true;
     musicDirectory = "/home/${user.username}/nas/musica/";
@@ -381,4 +392,10 @@ in
     };
   };
 
+  home.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = 1;
+    XDG_CURRENT_DESKTOP = "sway"; 
+    XDG_SESSION_TYPE = "wayland";
+  };
+  
 }
