@@ -14,7 +14,7 @@
 
 
 super.pkgs.emacsWithPackagesFromUsePackage {
-  config = ../../dotfiles/emacs/README.org;
+  config = ../../dotfiles/emacs/init.el;
   alwaysEnsure = true;
   alwaysTangle = true;
   package = super.pkgs.emacsPgtkGcc;

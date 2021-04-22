@@ -1,6 +1,6 @@
 { user, pkgs, ... }:
 
-let 
+let
   sources = import ./sources.nix;
 in
 {
@@ -15,7 +15,6 @@ in
     ack  # used by Helm for realtime grepping
     surfraw  # used by Helm for www searching
     youtube-dl
-    gphoto2  # to manage my digital camera
     ffmpeg  # useful to convert and edit my videos
     #gnutls
     rclone
@@ -29,8 +28,8 @@ in
     xcalib
     texlive.combined.scheme-full
     beets
-    nur.repos.mic92.nixos-shell
-    nixops
+    #nur.repos.mic92.nixos-shell
+    #nixops  # broken
     guile
     rclone
     wl-clipboard
@@ -48,18 +47,15 @@ in
     mpv
     (calibre.override {
       unrarSupport = true;  # why doesn't work?
-    }) 
-    element-desktop
-    tdesktop
+    })
     discord
-    deltachat-electron 
     gnome3.adwaita-icon-theme
 
     citrix_workspace
     teams
     remmina
     chromium
-    
+
     # DEVELOPING
     (python3.withPackages (ps: with ps; [
       pip
@@ -70,33 +66,32 @@ in
     nodejs
 
     nomachine-client
-  
-    monero-gui
- 
+
     # Games
     cmatrix
     tmatrix
     nethack
     cataclysm-dda
     angband
-    retroarch
-    lutris
-    vulkan-tools
-    wineWowPackages.stable
-    winetricks
-    qemu
-    dolphinEmu
 
     # Test
     pipewire
     xdg-desktop-portal
     xdg-desktop-portal-wlr
+
+
+    gphoto2fs
   ];
 
   home.file = {
     ".emacs.d" = {
-      source = ../dotfiles/emacs;
       recursive = true;
+      source = pkgs.fetchFromGitHub {
+        owner = "syl20bnr";
+        repo = "spacemacs";
+        rev = "bc713b194381234366aa2fe5b4246eb9958c46bc";
+        sha256 = "sha256-m2BBOlKirVYsFQVNeZGR7nC9fQfZ9aTXeeyEvLPVHdM=";
+      };
     };
     ".zlogin".source = ../dotfiles/zsh/.zlogin;
     ".config/qutebrowser/config.py".source = ../dotfiles/qutebrowser/config.py;
@@ -112,7 +107,7 @@ in
       config = {
         modifier = modifier;
         menu = "${pkgs.bemenu}/bin/bemenu-run -b -m 1";
-        output = if user.notebook then 
+        output = if user.notebook then
 	      {
           LVDS-1 = {
             bg = "~/dotfiles/dotfiles/xorg/wallpaper.jpg fill";
@@ -132,6 +127,11 @@ in
           command = "systemctl --user restart redshift";
           always = true;
         }];
+        floating = {
+          criteria = [
+            { title = "MetaMask Notification.*"; }
+          ];
+        };
       };
       extraConfig = ''
         bindsym ${modifier}+p move workspace to output right
@@ -171,12 +171,12 @@ in
           interval = 1;
         };
         "clock" = {
-          format = "{:%d %b %H:%M}";          
+          format = "{:%d %b %H:%M}";
         };
       };
     }];
   };
-  
+
   services.redshift = {
     enable = true;
     temperature = {
@@ -194,7 +194,12 @@ in
       background_opacity = 0.85;
     };
   };
-  
+
+  programs.direnv = {
+    enable = true;
+    enableNixDirenvIntegration = true;
+  };
+
   programs.zsh = {
     enable = true;
     enableAutosuggestions = true;
@@ -252,24 +257,29 @@ in
     enable = true;
     package = pkgs.vscode;
   };
-  
+
+  programs.browserpass = {
+    enable = true;
+    browsers = ["firefox"];
+  };
+
   programs.firefox = {
     enable = true;
-    package = (pkgs.firefox-wayland.override { extraNativeMessagingHosts = [
-      # pkgs.browserpass
-      pkgs.passff-host
-    ]; });
+    #package = (pkgs.firefox.override { extraNativeMessagingHosts = [
+    #  pkgs.browserpass
+      # pkgs.passff-host
+    #]; });
     extensions = with pkgs.nur.repos.rycee.firefox-addons; [
-      https-everywhere
-      privacy-badger
-      ublock-origin
-      react-devtools
-      org-capture
-      clearurls
-      # browserpass  # not working, manually installed passff
-      firefox-color
-      darkreader
-      cookie-autodelete
+      #https-everywhere
+      #privacy-badger
+      #ublock-origin
+      #react-devtools
+      #org-capture
+      #clearurls
+      browserpass  # not working, manually installed passff
+      #firefox-color
+      #darkreader
+      #cookie-autodelete
       # and manually installed ghost-text for atomic-chrome
     ];
     profiles."${user.username}" = {
@@ -289,7 +299,7 @@ in
         @-moz-document url("chrome://browser/content/browser.xul") {
           #TabsToolbar {
           visibility: collapse !important;
-            margin-bottom: 21px !important;
+            margin-bottom: 21px !emportant;
           }
 
           #sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
@@ -323,7 +333,7 @@ in
       KexAlgorithms +diffie-hellman-group1-sha1
     '';
   };
-  
+
   services.mpd = {
     enable = true;
     musicDirectory = "/home/${user.username}/nas/musica/";
@@ -394,8 +404,8 @@ in
 
   home.sessionVariables = {
     MOZ_ENABLE_WAYLAND = 1;
-    XDG_CURRENT_DESKTOP = "sway"; 
+    XDG_CURRENT_DESKTOP = "sway";
     XDG_SESSION_TYPE = "wayland";
   };
-  
+
 }
